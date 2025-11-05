@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calcutta Rangers FC — Until the End</title>
+  <meta name="color-scheme" content="dark">
+  <style>
+/* ----------------- THEME ----------------- */
+:root{
+  --crfc-black:#0b0b0b;
+  --crfc-yellow:#FFD700;
+  --crfc-purple:#7A00FF;
+  --muted: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.02);
+  --glass-3: rgba(255,255,255,0.04);
+  --card-radius:14px;
+  --shadow: 0 8px 30px rgba(122,0,255,0.12);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background:var(--crfc-black); color:#eee; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+
+
+
+/* ----------------- INTRO / CANVAS ----------------- */
+#intro {
+  position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg,#060606 0%, rgba(10,0,20,0.85) 60%);
+}
+#introCanvas{ position:absolute; inset:0; display:block }
+#introText {
+  z-index: 10000; font-family:"Bebas Neue",Impact,system-ui; color:var(--crfc-yellow);
+  font-size: clamp(20px, 4vw, 48px); letter-spacing:2px; text-align:center;
+  text-shadow: 0 0 18px var(--crfc-purple), 0 0 36px rgba(255,215,0,0.25);
+}
+#skipIntro{ position:absolute; top:18px; right:18px; background:transparent; border:1px solid rgba(255,255,255,0.06); padding:.5rem .75rem; color:#fff; border-radius:8px; cursor:pointer }
+
+ /*----------------- LOGIN MODAL ----------------- */
+#loginModal {
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:10010;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85));
+}
+.loginCard{
+  width:320px; padding:1.2rem; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04);
+  text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.6);
+  transform: translateY(-20px); animation: enter .7s cubic-bezier(.2,.9,.3,1) forwards;
+}
+@keyframes enter { to { transform:none } }
+.loginCard h3{ margin:0 0 .6rem; color:var(--crfc-yellow); font-family:Orbitron; letter-spacing:1px}
+.loginCard p{ margin:0 0 .8rem; color:rgba(255,255,255,0.7); font-size:.9rem}
+.loginCard input{ width:100%; padding:.6rem .7rem; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff; margin-bottom:.6rem }
+.loginCard button{ width:100%; padding:.6rem; border-radius:8px; border:none; font-weight:700; cursor:pointer; background:linear-gradient(45deg,var(--crfc-purple),var(--crfc-yellow)); color:#000; }
+
+/* ----------------- LAYOUT ----------------- */
+header{ position:relative; padding:1rem 2rem; display:flex; align-items:center; gap:1rem; z-index:50; border-bottom:1px solid rgba(255,255,255,0.02); background:linear-gradient(180deg, rgba(0,0,0,0.35), transparent) }
+.crest{ width:56px; height:56px; border-radius:8px; background:linear-gradient(135deg,var(--crfc-yellow),var(--crfc-purple)); display:flex; align-items:center; justify-content:center; font-weight:800; color:#000; font-family:"Orbitron"; box-shadow: var(--shadow) }
+header h1{ margin:0; font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; color:var(--crfc-yellow) }
+header p{ margin:0; color:rgba(255,255,255,0.6); font-size:0.85rem }
+
+/* === Header Section (Updated) === */
+header {
+  background: linear-gradient(135deg, #000, #1a001a);
+  text-align: center;
+  padding: 1.5rem 1rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(177, 156, 217, 0.3);
+  border-bottom: 2px solid #ffd700;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  animation: fadeInDown 1.5s ease;
+}
+
+.header-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+  transition: transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.header-logo:hover {
+  transform: rotate(360deg) scale(1.1);
+  box-shadow: 0 0 40px rgba(177, 156, 217, 0.8);
+}
+
+header h1 {
+  font-size: 2.2rem;
+  color: #ffd700;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(177, 156, 217, 0.6);
+  font-weight: 800;
+}
+
+nav {
+  margin-top: 0.8rem;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+nav a:hover {
+  color: #ffd700;
+  text-shadow: 0 0 10px #b19cd9;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ----------------- HERO ----------------- */
+.hero{ position:relative; min-height:70vh; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; padding:4rem 1rem 6rem; }
+.hero .bgParticles{ position:absolute; inset:0; pointer-events:none; z-index:0 }
+.heroInner{ position:relative; z-index:2; max-width:1100px; }
+.hero h2{ font-family:"Orbitron",sans-serif; font-size:clamp(34px,6vw,72px); margin:0; color:var(--crfc-yellow); text-transform:uppercase; letter-spacing:3px; text-shadow:0 0 18px var(--crfc-purple)}
+.motto{ margin-top:.6rem; font-style:italic; color:rgba(255,255,255,0.9); font-size:1.05rem; display:flex; align-items:center; justify-content:center; gap:.6rem }
+.motto .pulse{ color:var(--crfc-purple); font-weight:700; animation:heartbeat 1.6s infinite; text-shadow:0 0 10px rgba(122,0,255,0.25) }
+@keyframes heartbeat{ 0%{ transform:scale(1) } 40%{ transform:scale(1.08) text-shadow:0 0 18px rgba(255,215,0,0.2) } 100%{ transform:scale(1) } }
+
+/* CTA row */
+.ctaRow{ margin-top:1.6rem; display:flex; gap:1rem; justify-content:center; align-items:center; flex-wrap:wrap }
+.btn{
+  background:linear-gradient(45deg,var(--crfc-purple),var(--crfc-yellow)); color:#000; border:none; padding:.7rem 1rem; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:var(--shadow)
+}
+.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.08); color:#fff }
+
+/* ----------------- SHOWCASE / GRID ----------------- */
+.wrap{ max-width:1200px; margin:2rem auto; padding:0 1rem; display:grid; gap:2rem; grid-template-columns: 1fr 420px; align-items:start }
+@media (max-width:980px){ .wrap{ grid-template-columns: 1fr } }
+
+/* player cards grid */
+.cardGrid{ display:grid; grid-template-columns: repeat(3,1fr); gap:1rem }
+@media (max-width:980px){ .cardGrid{ grid-template-columns: repeat(2,1fr) } }
+@media (max-width:560px){ .cardGrid{ grid-template-columns: 1fr } }
+
+.playerCard{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.06);
+  padding:0; border-radius:var(--card-radius); overflow:hidden; position:relative; transform-style:preserve-3d; perspective:1000px;
+}
+.playerCardInner{ transition: transform .6s; transform-origin:center; position:relative; height:100%; min-height:260px; backface-visibility:hidden; transform-style:preserve-3d; }
+.playerTop{ display:flex; gap:1rem; padding:1rem; align-items:center; }
+.playerTop img{ width:88px; height:88px; border-radius:8px; object-fit:cover; border:2px solid rgba(255,255,255,0.04) }
+.playerTop h3{ margin:0; color:var(--crfc-yellow); font-size:1rem }
+.playerTop p{ margin:4px 0 0; color:var(--crfc-purple); font-weight:600; font-size:0.85rem }
+
+.stats{ padding:0 1rem 1rem; display:flex; flex-direction:column; gap:.5rem }
+.stat{ display:flex; align-items:center; gap:.6rem }
+.stat .bar{ flex:1; height:8px; background:var(--muted); border-radius:999px; overflow:hidden }
+.stat .bar > i{ display:block; height:100%; width:40%; background:linear-gradient(90deg,var(--crfc-purple),var(--crfc-yellow)); border-radius:999px; transform-origin:left }
+.stat label{ width:84px; font-size:0.85rem; color:rgba(255,255,255,0.7) }
+
+/* flip panel details */
+.flipBack{
+  position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,0.85), rgba(10,0,20,0.75)); color:#fff; padding:1rem; transform: rotateY(180deg); backface-visibility:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:.6rem;
+}
+
+/* ----------------- 3D CAROUSEL ----------------- */
+.carouselWrap{ perspective:1200px; height:360px; display:flex; align-items:center; justify-content:center }
+.carousel{ width:300px; height:300px; position:relative; transform-style:preserve-3d; transition: transform 800ms cubic-bezier(.2,.8,.2,1) }
+.carouselItem{ position:absolute; left:50%; top:50%; width:160px; height:220px; transform-origin:center; margin:-110px 0 0 -80px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2)); display:flex; flex-direction:column; align-items:center; padding:10px; box-shadow:0 8px 30px rgba(0,0,0,0.6) }
+.carouselItem img{ width:100%; height:120px; border-radius:8px; object-fit:cover; }
+.carouselControls{ display:flex; gap:.6rem; justify-content:center; margin-top:.6rem }
+.tiny{ padding:.35rem .5rem; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.06); cursor:pointer }
+
+/* === History Section === */
+.history-section {
+  background: linear-gradient(145deg, #000000, #1a001a);
+  color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+  margin: 3rem 0;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transform: perspective(1000px);
+}
+
+.history-section h2 {
+  font-size: 2rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  animation: fadeInDown 1.2s ease-in-out;
+}
+
+.history-content p {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  animation: fadeIn 1.8s ease;
+}
+
+.history-content .highlight {
+  color: #b19cd9; /* purple accent */
+  font-weight: bold;
+}
+
+.timeline {
+  margin-top: 2rem;
+  border-left: 4px solid #ffd700;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #ffd700, #b19cd9);
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.8rem;
+  padding-left: 1.5rem;
+  transition: transform 0.4s ease;
+}
+
+.timeline-item:hover {
+  transform: translateX(10px) scale(1.02);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -0.85rem;
+  top: 0.3rem;
+  width: 16px;
+  height: 16px;
+  background: #ffd700;
+  border: 2px solid #b19cd9;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.timeline-item .year {
+  font-weight: bold;
+  color: #ffd700;
+  font-size: 1.2rem;
+  text-shadow: 0 0 5px #b19cd9;
+}
+
+.timeline-item .desc {
+  color: #eee;
+  font-size: 0.95rem;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* ----------------- FORMATION BUILDER ----------------- */
+.pitch{
+  width:100%; background:linear-gradient(180deg,#042 0%, #031 100%); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.04);
+}
+.field{ width:100%; aspect-ratio: 14/9; background:linear-gradient(180deg,#063, #042); border-radius:8px; position:relative; overflow:hidden; border:2px solid rgba(255,255,255,0.03) }
+.field .gridLine{ position:absolute; left:0; right:0; height:1px; background:rgba(255,255,255,0.02); top:50% }
+.playerToken{ width:52px; height:52px; border-radius:50%; background:linear-gradient(45deg,var(--crfc-yellow),var(--crfc-purple)); display:flex; align-items:center; justify-content:center; color:#000; font-weight:800; position:absolute; cursor:grab; box-shadow:0 10px 30px rgba(122,0,255,0.12) }
+.tokenLabel{ font-size:11px; margin-top:6px; color:#fff; text-align:center }
+
+/* ----------------- RIGHT COLUMN (SHOUTBOARD + VISUALIZER) ----------------- */
+aside{ background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:1rem; border-radius:12px; border:1px solid rgba(255,255,255,0.04) }
+.shoutForm{ display:flex; gap:.5rem; margin-bottom:1rem }
+.shoutForm input{ flex:1; padding:.5rem .6rem; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff }
+.shoutList{ display:flex; flex-direction:column; gap:.5rem; max-height:220px; overflow:auto; padding-right:6px }
+.shoutItem{ background:linear-gradient(90deg, rgba(255,215,0,0.07), rgba(122,0,255,0.03)); padding:.6rem; border-radius:8px; border:1px solid rgba(255,255,255,0.04); color:#000; font-weight:700 }
+
+.viz{ height:120px; display:flex; align-items:center; justify-content:center; gap:.5rem; padding:0.6rem; border-radius:8px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04) }
+.viz canvas{ width:100%; height:100%; display:block }
+
+/* ----------------- GALLERY ----------------- */
+#gallery{ padding:2rem 1rem; max-width:1200px; margin: 0 auto; }
+.gallery-grid{
+  display:flex; gap:12px; overflow-x:auto; padding-bottom:8px; padding-top:8px;
+  scrollbar-width: thin; scrollbar-color: var(--crfc-yellow) transparent;
+}
+.gallery-item{ min-width:220px; height:140px; background-size:cover; background-position:center; border-radius:10px; flex:0 0 auto; border:1px solid rgba(255,255,255,0.04); cursor:pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.6) }
+.gallery-grid::-webkit-scrollbar{ height:10px }
+.gallery-grid::-webkit-scrollbar-thumb{ background:linear-gradient(90deg,var(--crfc-purple),var(--crfc-yellow)); border-radius:999px }
+
+/* modal image */
+.modal{ display:none; position:fixed; z-index:10020; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,0.8); align-items:center; justify-content:center }
+.modal-content{ max-width:80%; max-height:80%; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.8) }
+.modal .close{ position:absolute; right:18px; top:18px; color:#fff; font-size:28px; cursor:pointer }
+
+/* ----------------- FIXTURES TABLE ----------------- */
+.tableWrap{ overflow:auto; border-radius:10px; border:1px solid rgba(255,255,255,0.04); margin-top:1rem }
+table{ width:100%; border-collapse:collapse; min-width:720px; }
+th,td{ padding:.7rem 1rem; text-align:left; border-bottom:1px solid rgba(255,255,255,0.03) }
+th{ color:var(--crfc-yellow); font-family:Orbitron; }
+
+/* ----------------- CONTACT ----------------- */
+.contact{ padding:1rem; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); margin-top:1rem }
+
+/* ----------------- MISC ----------------- */
+footer{ text-align:center; color:rgba(255,255,255,0.5); padding:2rem 1rem 4rem; font-size:0.9rem }
+.small{ font-size:0.85rem; color:rgba(255,255,255,0.6) }
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important; animation:none!important}
+}
+  </style>
+</head>
+<body>
+
+<!-- INTRO / PARTICLE REVEAL -->
+<div id="intro" aria-hidden="false">
+  <canvas id="introCanvas"></canvas>
+  <div id="introText">CALCUTTA RANGERS FC</div>
+  <button id="skipIntro">Skip</button>
+</div>
+
+
+
+<!-- Header -->
+<header>
+  <div class="logo-container">
+    <img src="logo.png" alt="Calcutta Rangers FC Logo" class="header-logo" />
+    <h1>Calcutta Rangers FC</h1>
+  </div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#history">History</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#players">Players</a>
+    <a href="#fixtures">Fixtures</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas class="bgParticles" id="bgParticles"></canvas>
+  <div class="heroInner">
+    <h2>Calcutta Rangers</h2>
+    <div class="motto"><span class="pulse">Until</span> the End — <span class="small">We bleed black & gold</span></div>
+    <div class="ctaRow">
+      <button class="btn" id="showcaseBtn">Showcase Players</button>
+      <button class="ghost btn" id="formationBtn">Formation Builder</button>
+      <button class="ghost btn" id="anthemBtn">Anthem Visualizer</button>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery">
+  <h2 style="text-align:center; color:var(--crfc-yellow); font-family:Orbitron">Gallery</h2>
+  <div class="gallery-grid" id="galleryGrid" aria-label="Image gallery">
+    <div class="gallery-item" data-src="pic1.png" style="background-image:url('pic1.png');"></div>
+    <div class="gallery-item" data-src="pic2.png" style="background-image:url('pic2.png');"></div>
+    <div class="gallery-item" data-src="pic3.png" style="background-image:url('pic3.png');"></div>
+    <div class="gallery-item" data-src="pic4.png" style="background-image:url('pic4.png');"></div>
+    <div class="gallery-item" data-src="pic5.png" style="background-image:url('pic5.png');"></div>
+    <div class="gallery-item" data-src="pic6.png" style="background-image:url('pic6.png');"></div>
+    <div class="gallery-item" data-src="pic7.png" style="background-image:url('pic7.png');"></div>
+    <div class="gallery-item" data-src="pic8.png" style="background-image:url('pic8.png');"></div>
+    <div class="gallery-item" data-src="pic9.png" style="background-image:url('pic9.png');"></div>
+  
+   </div>
+</section>
+
+<!-- Modal for full image view -->
+<div id="imageModal" class="modal" aria-hidden="true">
+  <span class="close" id="closeImageModal">&times;</span>
+  <img class="modal-content" id="modalImage" alt="Gallery image">
+  <div id="caption"></div>
+</div>
+
+<!-- MAIN WRAP -->
+<div class="wrap">
+  <!-- LEFT: Showcase -->
+  <main>
+    <section>
+      <h3 style="color:var(--crfc-yellow); font-family:Orbitron;">Ranger Lineup</h3>
+      <div class="cardGrid" id="cardGrid">
+        <!-- Player cards injected by JS -->
+      </div>
+    </section>
+
+    <section style="margin-top:1.5rem">
+      <h3 style="color:var(--crfc-yellow); font-family:Orbitron;">3D Player Carousel</h3>
+      <div class="carouselWrap">
+        <div class="carousel" id="carousel" aria-hidden="false"></div>
+      </div>
+      <div class="carouselControls">
+        <button class="tiny" id="prevC">◀</button>
+        <button class="tiny" id="nextC">▶</button>
+      </div>
+    </section>
+
+
+
+    <section style="margin-top:1.5rem">
+      <h3 style="color:var(--crfc-yellow); font-family:Orbitron;">Formation Builder</h3>
+      <div class="pitch">
+        <div class="field" id="field">
+          <div class="gridLine"></div>
+        </div>
+        <div style="margin-top:.6rem; display:flex; gap:.6rem; align-items:center;">
+          <button class="tiny" id="saveForm">Save Formation</button>
+          <button class="tiny" id="loadForm">Load Formation</button>
+          <button class="tiny" id="resetForm">Reset</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- RIGHT: Shoutboard + Visualizer -->
+  <aside>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.7rem">
+      <strong style="color:var(--crfc-yellow)">Fan Shoutboard</strong>
+      <button class="tiny" id="clearShouts">Clear</button>
+    </div>
+    <form class="shoutForm" id="shoutForm" onsubmit="return false;">
+      <input id="shoutName" placeholder="Your name" />
+      <input id="shoutMsg" placeholder="Shout (max 80 chars)" maxlength="80" />
+      <button class="tiny" id="shoutBtn">Cheer</button>
+    </form>
+    <div class="shoutList" id="shoutList" aria-live="polite"></div>
+
+    <hr style="border:none; height:1px; background:rgba(255,255,255,0.03); margin:1rem 0">
+
+    <div style="display:flex; gap:.5rem; align-items:center; justify-content:space-between; margin-bottom:.5rem">
+      <strong style="color:var(--crfc-yellow)">Anthem Visualizer</strong>
+      <label class="tiny" style="cursor:pointer">Upload
+        <input id="anthemFile" type="file" accept="audio/*" style="display:none" />
+      </label>
+    </div>
+    <div class="viz" aria-hidden="false">
+      <canvas id="vizCanvas"></canvas>
+    </div>
+    <div style="display:flex; gap:.5rem; margin-top:.6rem;">
+      <button class="tiny" id="playAnthem">Play</button>
+      <button class="tiny" id="stopAnthem">Stop</button>
+      <button class="tiny" id="victoryBtn">Show Off (Victory)</button>
+    </div>
+
+    <p class="small" style="margin-top:1rem">Tip: Upload your club anthem or chant. Visualizer responds in real time.</p>
+  </aside>
+</div>
+
+<section id="history" class="section history-section">
+  <h2>Our Glorious History</h2>
+  <div class="history-content">
+    <p>
+      Founded in <strong>1893</strong>, <span class="highlight">Calcutta Rangers FC</span> stands as one of the oldest football clubs in Kolkata. 
+      What began as a small gathering of passionate footballers soon evolved into a symbol of 
+      pride, unity, and sporting excellence for Bengal.
+    </p>
+
+    <p>
+      The club’s early years were defined by fierce competition at the Maidan, 
+      where Rangers made their mark with fearless performances and sportsmanship. 
+      Through colonial times and the birth of modern India, the Rangers’ spirit never faded — 
+      they became a voice for passion and persistence in the city that breathes football.
+    </p>
+
+    <p>
+      Over the decades, the club has witnessed golden moments, intense rivalries, and a 
+      growing community of supporters who carry the Rangers’ banner high. 
+      From local triumphs to legendary derbies, Calcutta Rangers continues to inspire 
+      generations of players and fans alike.
+    </p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">2023</div>
+        <div class="desc">Club Founded — The Beginning of a Legacy</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1st Oct 2024</div>
+        <div class="desc">First Major Tournament (Legions Cup 1.0)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1st Mar 2025</div>
+        <div class="desc">Legions Cup 2.0 through the group stage</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">21st Sept 2025</div>
+        <div class="desc">Legions Cup 3.0</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2026</div>
+        <div class="desc">Waiting For The Next Challenge</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section style="max-width:1200px; margin:2rem auto; padding:0 1rem">
+  <div class="contact">
+    <h3 style="color:var(--crfc-yellow); font-family:Orbitron;">Contact Us</h3>
+    <p>For enquiries, partnerships or media: <a href="mailto:calcuttarangersfc@gmail.com" style="color:var(--crfc-yellow); text-decoration:underline">calcuttarangersfc@gmail.com</a></p>
+    <p class="small">Follow us — Official Site. Copy this mail and use this to mail us.</p>
+  </div>
+</section>
+
+<footer>
+  Calcutta Rangers FC - Made By Sancho• <span id="eggHint">Try the Konami code 😉</span>
+</footer>
+
+<!-- AUDIO (hidden) -->
+<audio id="anthemAudio" crossorigin="anonymous"></audio>
+
+<script>
+/* ===================== DATA: 12 players (with jersey & comment) ===================== */
+const players = [
+  { id:1, name:'SEEYON', num:1, pos:'GK', img:'player1.png', s:{pace:86,shoot:18,pass:72,def:48,stam:80}, comment: 'Shot-stopper, commanding in box.' },
+  { id:2, name:'ANIRMEKH', num:3, pos:'MF', img:'player3.png', s:{pace:72,shoot:68,pass:85,def:60,stam:82}, comment: 'Playmaker with vision.' },
+  { id:3, name:'RAQEEB', num:4, pos:'DF', img:'player4.png', s:{pace:66,shoot:42,pass:70,def:88,stam:75}, comment: 'Solid, reads the game well.' },
+  { id:4, name:'SARNAVO', num:5, pos:'FW', img:'player5.png', s:{pace:90,shoot:92,pass:56,def:22,stam:80}, comment: 'Clinical finisher.' },
+  { id:5, name:'ABHIJOY', num:7, pos:'FW', img:'player7.png', s:{pace:84,shoot:80,pass:65,def:40,stam:78}, comment: 'Pacey winger, direct runs.' },
+  { id:6, name:'DEEPANJAN', num:8, pos:'MF', img:'player8.png', s:{pace:76,shoot:60,pass:80,def:60,stam:77}, comment: 'Box-to-box engine.' },
+  { id:7, name:'RAAFAY', num:3, pos:'DF', img:'player9.png', s:{pace:68,shoot:46,pass:64,def:84,stam:74}, comment: 'Tough tackler.' },
+  { id:8, name:'SAPTARSHI', num:10, pos:'FW', img:'player10.png', s:{pace:74,shoot:66,pass:78,def:58,stam:79}, comment: 'Creative set-piece taker.' },
+  { id:9, name:'PARAMBRATA', num:11, pos:'FW', img:'player11.png', s:{pace:88,shoot:82,pass:62,def:36,stam:81}, comment: 'Lethal on counter-attacks.' },
+  { id:10, name:'TATHAGATA', num:12, pos:'DF', img:'player12.png', s:{pace:64,shoot:44,pass:60,def:86,stam:73}, comment: 'Calm in defence.' },
+  { id:11, name:'SAYONIL', num:16, pos:'DF', img:'player16.png', s:{pace:70,shoot:58,pass:79,def:59,stam:76}, comment: 'Reliable link-up play.' },
+  { id:12, name:'KAMRAN', num:17, pos:'DF', img:'player17.png', s:{pace:83,shoot:79,pass:61,def:42,stam:80}, comment: 'Determined, and never give up.' },
+  { id:13, name:'PRATIK', num:33, pos:'DF', img:'player33.png', s:{pace:83,shoot:79,pass:61,def:42,stam:80}, comment: 'Focused.' },
+  { id:14, name:'SANCHAYAN', num:37, pos:'DF', img:'player37.png', s:{pace:83,shoot:79,pass:61,def:42,stam:80}, comment: 'Strong and Composed.' }
+];
+
+/* ===================== UTIL: element create ===================== */
+function el(tag, attrs={}, ...children){ const e=document.createElement(tag); for(let k in attrs) if(k==='cls') e.className=attrs[k]; else if(k==='html') e.innerHTML=attrs[k]; else e.setAttribute(k, attrs[k]); children.flat().forEach(c=>{ if(typeof c==='string') e.appendChild(document.createTextNode(c)); else if(c) e.appendChild(c); }); return e; }
+
+/* ===================== INTRO PARTICLES + TYPEWRITER ===================== */
+(function intro(){
+  const canvas = document.getElementById('introCanvas');
+  const ctx = canvas.getContext('2d');
+  let w=canvas.width=innerWidth, h=canvas.height=innerHeight;
+  window.addEventListener('resize', ()=>{ w=canvas.width=innerWidth; h=canvas.height=innerHeight; });
+  const particles=[];
+  for(let i=0;i<450;i++){
+    particles.push({ x: Math.random()*w, y: Math.random()*h, vx:0, vy:0, tx: w/2 + (Math.random()-0.5)*480, ty: h/2 + (Math.random()-0.5)*220, r: Math.random()*1.8+0.6 });
+  }
+  let frame=0, done=false;
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    const g = ctx.createLinearGradient(0,0,w,h); g.addColorStop(0,'#050005'); g.addColorStop(1,'#070015');
+    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+    for(const p of particles){
+      p.vx += (p.tx - p.x) * 0.002 + (Math.random()-0.5)*0.12;
+      p.vy += (p.ty - p.y) * 0.002 + (Math.random()-0.5)*0.12;
+      p.vx *= 0.95; p.vy *= 0.95; p.x += p.vx; p.y += p.vy;
+      ctx.beginPath(); ctx.fillStyle = 'rgba(255,215,0,0.95)'; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    }
+    frame++;
+    if(frame < 420) requestAnimationFrame(draw);
+    else if(!done){ done=true; typeWriter(); }
+  }
+  draw();
+
+  const txtEl = document.getElementById('introText');
+  function typeWriter(){
+    const text = 'CALCUTTA RANGERS FC — UNTIL THE END';
+    let i=0;
+    const iv=setInterval(()=>{ txtEl.textContent = text.slice(0, ++i); if(i>=text.length){ clearInterval(iv); setTimeout(closeIntro,700); } }, 50);
+  }
+  function closeIntro(){
+    const introEl = document.getElementById('intro');
+    introEl.style.transition='opacity .7s ease'; introEl.style.opacity=0;
+    setTimeout(()=> introEl.remove(),800);
+  }
+  document.getElementById('skipIntro').addEventListener('click', closeIntro);
+})();
+
+/* ===================== BACKGROUND PARTICLES (hero) ===================== */
+(function bgParticles(){
+  const canvas = document.getElementById('bgParticles'); const ctx = canvas.getContext('2d');
+  let w=canvas.width=innerWidth, h=canvas.height=document.querySelector('.hero').clientHeight;
+  window.addEventListener('resize', ()=>{ w=canvas.width=innerWidth; h=canvas.height=document.querySelector('.hero').clientHeight; });
+  const pts = [];
+  for(let i=0;i<80;i++) pts.push({ x:Math.random()*w, y:Math.random()*h, r: Math.random()*2+0.6, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.15 });
+  function anim(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of pts){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0)p.x=w; if(p.x> w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      const grad = ctx.createRadialGradient(p.x,p.y,p.r*0.2, p.x,p.y,p.r*6);
+      grad.addColorStop(0, 'rgba(255,215,0,0.12)');
+      grad.addColorStop(0.5, 'rgba(122,0,255,0.06)');
+      grad.addColorStop(1,'transparent');
+      ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+
+/* ===================== BUILD PLAYER CARDS + 3D CAROUSEL ===================== */
+(function buildPlayers(){
+  const grid = document.getElementById('cardGrid');
+  for(const p of players){
+    const card = el('div',{cls:'playerCard', 'data-id':p.id},
+      el('div',{cls:'playerCardInner'},
+        el('div',{cls:'playerTop'},
+          el('img',{src:p.img, alt:p.name}),
+          el('div',{}, el('h3',{},p.name), el('p',{},p.pos))
+        ),
+        el('div',{cls:'stats'},
+          ...Object.entries(p.s).map(([k,v])=>{
+            const label = k.toUpperCase();
+            const statEl = el('div',{cls:'stat'}, el('label',{},label), el('div',{cls:'bar'}, el('i', {style:`width:${v}%`})));
+            return statEl;
+          })
+        ),
+        // back face (flip)
+        el('div',{cls:'flipBack'},
+          el('div',{}, el('strong',{},`#${p.num} — ${p.name}`)),
+          el('div',{}, el('em',{}, p.comment)),
+          el('div',{}, el('small',{}, `${p.pos} • Jersey #${p.num}`))
+        )
+      )
+    );
+    // attach click to flip
+    card.addEventListener('click', (e)=>{
+      // only flip if clicked not dragging token etc
+      const inner = card.querySelector('.playerCardInner');
+      if(inner.style.transform.includes('rotateY(180deg)')) inner.style.transform = '';
+      else inner.style.transform = 'rotateY(180deg)';
+    });
+    grid.appendChild(card);
+  }
+
+  // 3D carousel
+  const carousel = document.getElementById('carousel');
+  const radius = 160;
+  const items = [];
+  players.slice(0,14).forEach((p,i)=>{
+    const item = el('div',{cls:'carouselItem', 'data-i':i},
+      el('img',{src:p.img, alt:p.name}),
+      el('div',{}, el('strong',{},p.name), el('div',{},p.pos))
+    );
+    carousel.appendChild(item);
+    items.push(item);
+  });
+  function position(n=0){
+    const total = items.length;
+    for(let i=0;i<total;i++){
+      const angle = (i - n) * (2*Math.PI/total);
+      const x = Math.sin(angle) * radius;
+      const z = Math.cos(angle) * radius;
+      const y = Math.sin((i-n)*0.5) * 10;
+      const rot = (i-n) * -18;
+      items[i].style.transform = `translateX(${x}px) translateZ(${z}px) translateY(${y}px) rotateY(${rot}deg)`;
+      const scale = (z + radius) / (radius*1.3) + 0.5;
+      items[i].style.opacity = (z> -radius*0.6)?1:0.28;
+      items[i].style.zIndex = Math.round(z + 1000);
+      items[i].style.transform += ` scale(${scale})`;
+    }
+  }
+  let cur = 0; position(0);
+  document.getElementById('prevC').addEventListener('click', ()=>{ cur = (cur-1+items.length)%items.length; position(cur) });
+  document.getElementById('nextC').addEventListener('click', ()=>{ cur = (cur+1)%items.length; position(cur) });
+
+  // autoplay rotate
+  let auto = setInterval(()=>{ cur = (cur+1)%items.length; position(cur) }, 3800);
+  carousel.addEventListener('mouseenter', ()=> clearInterval(auto));
+  carousel.addEventListener('mouseleave', ()=> { auto = setInterval(()=>{ cur = (cur+1)%items.length; position(cur) }, 3800); });
+
+})();
+
+/* ===================== FORMATION BUILDER (DRAG & DROP) ===================== */
+(function formation(){
+  const field = document.getElementById('field');
+  const tokens = [];
+  // create tokens for each player
+  players.forEach((p, idx)=>{
+    const t = el('div',{cls:'playerToken', id:'token-'+p.id, draggable:'true'}, p.name[0]);
+    t.style.left = (6 + (idx%4)*23) + '%';
+    t.style.top  = (6 + Math.floor(idx/4)*28) + '%';
+    // label
+    const lbl = el('div',{cls:'tokenLabel'}, p.name);
+    t.appendChild(lbl);
+    field.appendChild(t);
+    tokens.push(t);
+    // drag
+    t.addEventListener('dragstart', (ev)=>{ ev.dataTransfer.setData('text/plain', p.id); setTimeout(()=>t.style.opacity=0.6,40) });
+    t.addEventListener('dragend', ()=>{ t.style.opacity=1 });
+    // also allow touch drag
+    let isTouch=false, startX=0, startY=0;
+    t.addEventListener('pointerdown', (e)=>{ isTouch=true; t.setPointerCapture(e.pointerId); startX=e.clientX; startY=e.clientY; t.dataset.dragging='1' });
+    t.addEventListener('pointermove', (e)=>{ if(!t.dataset.dragging) return; const rect = field.getBoundingClientRect(); const x = Math.min(98, Math.max(1, ((e.clientX - rect.left)/rect.width)*100)); const y = Math.min(98, Math.max(1, ((e.clientY - rect.top)/rect.height)*100)); t.style.left = x + '%'; t.style.top = y + '%'; });
+    t.addEventListener('pointerup', (e)=>{ delete t.dataset.dragging; try{ t.releasePointerCapture(e.pointerId) }catch(_){} });
+  });
+
+  // allow drop on field
+  field.addEventListener('dragover', (e)=> e.preventDefault());
+  field.addEventListener('drop', (e)=>{
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text/plain'); if(!id) return;
+    const token = document.getElementById('token-'+id);
+    const rect = field.getBoundingClientRect();
+    const x = Math.min(98, Math.max(1, ((e.clientX - rect.left)/rect.width)*100));
+    const y = Math.min(98, Math.max(1, ((e.clientY - rect.top)/rect.height)*100));
+    token.style.left = x + '%'; token.style.top = y + '%';
+  });
+
+  // save/load/reset
+  document.getElementById('saveForm').addEventListener('click', ()=>{
+    const data = Array.from(document.querySelectorAll('.playerToken')).map(t=>({id:t.id, left:t.style.left, top:t.style.top}));
+    localStorage.setItem('crfc_formation', JSON.stringify(data));
+    showToast('Formation saved locally.');
+  });
+  document.getElementById('loadForm').addEventListener('click', ()=>{
+    const data = JSON.parse(localStorage.getItem('crfc_formation') || '[]');
+    if(!data.length){ showToast('No saved formation found.'); return; }
+    data.forEach(d=>{ const t=document.getElementById(d.id); if(t){ t.style.left=d.left; t.style.top=d.top } });
+    showToast('Formation loaded.');
+  });
+  document.getElementById('resetForm').addEventListener('click', ()=>{ document.querySelectorAll('.playerToken').forEach((t,i)=>{ t.style.left = (6 + (i%4)*23) + '%'; t.style.top = (6 + Math.floor(i/4)*28) + '%' }); showToast('Reset formation.'); });
+})();
+
+/* ===================== SHOUTBOARD (localStorage + motion) ===================== */
+(function shoutboard(){
+  const listEl = document.getElementById('shoutList');
+  const nameEl = document.getElementById('shoutName');
+  const msgEl = document.getElementById('shoutMsg');
+  const form = document.getElementById('shoutForm');
+
+  // if user logged in earlier
+  const storedUser = localStorage.getItem('crfc_user') || '';
+  if(storedUser) nameEl.value = storedUser;
+
+  function render(){
+    listEl.innerHTML = '';
+    const arr = JSON.parse(localStorage.getItem('crfc_shouts')||'[]').slice(-30);
+    arr.reverse().forEach(s=>{
+      const item = el('div',{cls:'shoutItem'}, `${s.name}: ${s.msg}`);
+      listEl.appendChild(item);
+      // flying banner animation (non-blocking)
+      const banner = el('div',{cls:'shoutItem'}, `${s.name} cheers: ${s.msg}`);
+      banner.style.position='fixed'; banner.style.left='-100%'; banner.style.bottom= (20 + Math.random()*120) + 'px'; banner.style.zIndex=9998; banner.style.fontWeight='900';
+      banner.style.padding = '.6rem'; banner.style.borderRadius='8px';
+      banner.style.background = Math.random()>0.5? 'linear-gradient(90deg, rgba(255,215,0,0.9), rgba(122,0,255,0.2))' : 'linear-gradient(90deg, rgba(122,0,255,0.9), rgba(255,215,0,0.2))';
+      document.body.appendChild(banner);
+      setTimeout(()=> banner.style.transition='transform 6s linear', 20);
+      setTimeout(()=> banner.style.transform = `translateX(${window.innerWidth+400}px)`, 30);
+      setTimeout(()=> banner.remove(), 6500);
+    });
+  }
+  render();
+  document.getElementById('shoutBtn').addEventListener('click', ()=>{
+    const name = (nameEl.value||localStorage.getItem('crfc_user')||'Ranger').slice(0,20), msg = (msgEl.value||'For the Rangers!').slice(0,80);
+    const arr = JSON.parse(localStorage.getItem('crfc_shouts')||'[]');
+    arr.push({ name, msg, t: Date.now() });
+    localStorage.setItem('crfc_shouts', JSON.stringify(arr));
+    nameEl.value=name; localStorage.setItem('crfc_user', name);
+    msgEl.value='';
+    render();
+  });
+  document.getElementById('clearShouts').addEventListener('click', ()=>{ localStorage.removeItem('crfc_shouts'); render(); });
+})();
+
+/* ===================== ANTHEM VISUALIZER (WebAudio) ===================== */
+(function visualizer(){
+  let audioCtx, source, analyser, dataArr, raf;
+  const audio = document.getElementById('anthemAudio');
+  const fileIn = document.getElementById('anthemFile');
+  const playBtn = document.getElementById('playAnthem'), stopBtn = document.getElementById('stopAnthem');
+  const canvas = document.getElementById('vizCanvas'); const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = canvas.clientWidth * devicePixelRatio; canvas.height = canvas.clientHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0) }
+  window.addEventListener('resize', resize); resize();
+
+  fileIn.addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; audio.src = URL.createObjectURL(f); });
+
+  function setupAudio(){
+    if(!audio.src) { alert('Upload an audio file first.'); return false; }
+    if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); analyser = audioCtx.createAnalyser(); analyser.fftSize = 256; dataArr = new Uint8Array(analyser.frequencyBinCount); source = audioCtx.createMediaElementSource(audio); source.connect(analyser); analyser.connect(audioCtx.destination); }
+    return true;
+  }
+
+  function draw(){
+    analyser.getByteFrequencyData(dataArr);
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    ctx.save(); ctx.translate(0,0);
+    const barW = w / dataArr.length;
+    for(let i=0;i<dataArr.length;i++){
+      const v = dataArr[i]/255; const barH = v * h * 0.9;
+      const x = i*barW;
+      const g = ctx.createLinearGradient(x,0,x+barW,0);
+      g.addColorStop(0, 'rgba(122,0,255,0.9)');
+      g.addColorStop(1, 'rgba(255,215,0,0.9)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x, h-barH, barW*0.8, barH);
+    }
+    ctx.restore();
+    raf = requestAnimationFrame(draw);
+  }
+
+  playBtn.addEventListener('click', async ()=>{
+    if(!setupAudio()) return;
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    audio.play(); draw();
+  });
+  stopBtn.addEventListener('click', ()=>{ audio.pause(); if(raf) cancelAnimationFrame(raf); });
+
+})();
+
+/* ===================== VICTORY / SHOW OFF (CONFETTI + LIGHT) ===================== */
+(function victory(){
+  const btn = document.getElementById('victoryBtn');
+  btn.addEventListener('click', showOff);
+  function showOff(){
+    for(let i=0;i<140;i++){
+      const d = document.createElement('div');
+      d.style.position='fixed';
+      d.style.left = (Math.random()*100) + '%';
+      d.style.top = (Math.random()*20) + '%';
+      d.style.width = d.style.height = (6 + Math.random()*10) + 'px';
+      d.style.background = Math.random()>0.5? 'var(--crfc-yellow)': 'var(--crfc-purple)';
+      d.style.transform = `rotate(${Math.random()*360}deg)`;
+      d.style.opacity = 0.9; d.style.zIndex = 9999; d.style.borderRadius = '2px';
+      document.body.appendChild(d);
+      const fall = 2000 + Math.random()*2400;
+      d.animate([{transform:'translateY(0) rotate(0deg)', opacity:1}, {transform:`translateY(${400 + Math.random()*900}px) rotate(${Math.random()*720}deg)`, opacity:0}], {duration:fall, easing:'cubic-bezier(.2,.9,.3,1)'});
+      setTimeout(()=> d.remove(), 3000 + Math.random()*1200);
+    }
+    const crest = document.querySelector('.crest'); crest.animate([{boxShadow:'0 6px 30px rgba(122,0,255,0.2)'},{boxShadow:'0 16px 60px rgba(255,215,0,0.35)'}], {duration:800, direction:'alternate', iterations:6});
+  }
+})();
+
+/* ===================== KONAMI EASTER EGG ===================== */
+(function konami(){
+  const code = [38,38,40,40,37,39,37,39,66,65]; let pos=0;
+  window.addEventListener('keydown', (e)=>{
+    if(e.keyCode === code[pos]) pos++; else pos=0;
+    if(pos === code.length){ pos=0; legendary(); }
+  });
+  function legendary(){
+    alert('LEGENDARY RANGER MODE ACTIVATED — Show off!');
+    document.querySelector('.motto .pulse').style.animation = 'heartbeat .7s infinite';
+  }
+})();
+
+/* ===================== VOICE NAVIGATION (basic) ===================== */
+(function voiceNav(){
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recog = new SpeechRecognition(); recog.continuous=false; recog.lang='en-IN';
+  function start(){ recog.start(); }
+  recog.onresult = (e)=>{ const t = e.results[0][0].transcript.toLowerCase(); handle(t); }
+  function handle(t){
+    if(t.includes('players')) document.getElementById('showcaseBtn').click();
+    else if(t.includes('formation')) document.getElementById('formationBtn').click();
+    else if(t.includes('anthem')) document.getElementById('anthemBtn').click();
+    else alert('Say "players", "formation" or "anthem". Heard: '+t);
+  }
+  // small hotkeys
+  document.getElementById('showcaseBtn').addEventListener('click', ()=>{ window.scrollTo({top:document.querySelector('.cardGrid').offsetTop - 80, behavior:'smooth'}) });
+  document.getElementById('formationBtn').addEventListener('click', ()=>{ window.scrollTo({top:document.querySelector('.pitch').offsetTop - 80, behavior:'smooth'}) });
+  document.getElementById('anthemBtn').addEventListener('click', ()=>{ window.scrollTo({top:document.querySelector('.viz').offsetTop - 80, behavior:'smooth'}) });
+
+  // start voice on long-press of crest
+  const crest = document.querySelector('.crest');
+  let hold;
+  crest.addEventListener('mousedown', ()=>{ hold = setTimeout(()=> start(), 700) });
+  crest.addEventListener('mouseup', ()=> clearTimeout(hold));
+})();
+
+/* ===================== GALLERY MODAL ===================== */
+(function gallery(){
+  const grid = document.getElementById('galleryGrid');
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  const close = document.getElementById('closeImageModal');
+
+  grid.addEventListener('click', (e)=>{
+    const item = e.target.closest('.gallery-item');
+    if(!item) return;
+    const src = item.dataset.src || item.style.backgroundImage.slice(5,-2);
+    modalImg.src = src;
+    modal.style.display='flex';
+    modal.setAttribute('aria-hidden','false');
+  });
+  close.addEventListener('click', ()=>{ modal.style.display='none'; modal.setAttribute('aria-hidden','true') });
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) { modal.style.display='none'; modal.setAttribute('aria-hidden','true') } });
+  document.getElementById('openGalleryBtn').addEventListener('click', ()=> window.scrollTo({top:document.getElementById('gallery').offsetTop - 60, behavior:'smooth'}));
+})();
+
+/* ===================== FIXTURES TABLE CONTENT ===================== */
+
+(function fixtures(){
+  const rows = [
+    ['2025-11-11','Bengal United','Maidan Stadium','League','19:00'],
+    ['2025-11-19','East Rivers','Away Ground','Cup','17:30'],
+    ['2025-11-26','Northern FC','Home Arena','League','19:15'],
+    ['2025-12-03','Sundarbans SC','Maidan Stadium','League','18:45']
+  ];
+  const tbody = document.querySelector('#fixturesTable tbody');
+  rows.forEach(r=>{
+    const tr = el('tr',{}, ...r.map(c=>el('td',{},c)));
+    tbody.appendChild(tr);
+  });
+})();
+
+/* ===================== LOGIN BEHAVIOUR ===================== */
+(function login(){
+  const modal = document.getElementById('loginModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginName = document.getElementById('loginName');
+  const loginPass = document.getElementById('loginPass');
+
+  // prefer stored name
+  const stored = localStorage.getItem('crfc_user');
+  if(stored){ loginName.value = stored; setTimeout(()=> modal.style.display='none', 800); }
+
+  loginBtn.addEventListener('click', ()=>{
+    const name = (loginName.value || 'Ranger').trim();
+    if(!name){ loginName.focus(); return; }
+    localStorage.setItem('crfc_user', name);
+    // gracefully close modal with animation
+    document.getElementById('loginCard').style.transform = 'translateY(20px) scale(.98)'; document.getElementById('loginCard').style.opacity=0;
+    setTimeout(()=> modal.style.display='none', 400);
+    showToast(`Welcome, ${name}!`);
+    // populate shout name if empty
+    const sName = document.getElementById('shoutName');
+    if(sName && !sName.value) sName.value = name;
+  });
+})();
+
+/* ===================== SMALL UTILITY: toast ===================== */
+function showToast(msg){
+  const t = document.createElement('div');
+  t.textContent = msg; t.style.position='fixed'; t.style.left='50%'; t.style.top='12%'; t.style.transform='translateX(-50%)'; t.style.background='linear-gradient(90deg,var(--crfc-purple),var(--crfc-yellow))'; t.style.padding='.6rem 1rem'; t.style.borderRadius='10px'; t.style.zIndex=10050; t.style.color='#000'; t.style.fontWeight='700';
+  document.body.appendChild(t); setTimeout(()=> t.style.transition='opacity .6s ease, transform .6s ease', 20); setTimeout(()=> t.style.opacity=0, 2500); setTimeout(()=> t.remove(), 3200);
+}
+
+/* ===================== SMALL UTILITY: hint ===================== */
+(function hint(){ const el=document.getElementById('eggHint'); setTimeout(()=> el.textContent='(or hold crest to speak)', 1800) })();
+
+</script>
+</body>
+</html>
